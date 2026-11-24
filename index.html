@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="description"
+      content="A quiet full-screen page for freewriting. Your words stay in this browser."
+    />
+    <title>Freewrite</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #fff;
+      }
+      html[data-theme="dark"],
+      html[data-theme="dark"] body {
+        background: #000;
+      }
+    </style>
+    <script>
+      (function () {
+        var theme = "light";
+        try {
+          var raw = localStorage.getItem("freewrite.v1");
+          if (raw) {
+            var saved = JSON.parse(raw).settings && JSON.parse(raw).settings.theme;
+            if (saved === "dark" || saved === "light") theme = saved;
+          } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            theme = "dark";
+          }
+        } catch (error) {
+          theme = "light";
+        }
+        document.documentElement.setAttribute("data-theme", theme);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#000000" : "#ffffff");
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
